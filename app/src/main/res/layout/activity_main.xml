@@ -9,8 +9,9 @@
     <com.naver.maps.map.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
-    <include layout="@layout/bottom_sheet"/>
+    <include layout="@layout/bottom_sheet" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
