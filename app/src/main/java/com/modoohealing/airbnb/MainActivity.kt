@@ -1,12 +1,14 @@
 package com.modoohealing.airbnb
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
+import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 
-class MainActivity : AppCompatActivity(),OnMapReadyCallback {
+class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var naverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
         naverMap.minZoom = 10.0 //naverMap 최소크기
 
         //시작 위치는 시청으로 되어있음 => 강남역으로 시작위치 변경하기
-        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.498095,127.027610))
+        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.498095, 127.027610))
         naverMap.moveCamera(cameraUpdate)
 
         //현재위치 확인버튼 => 위치를 확인해야 하므로 권한필요
@@ -41,6 +43,12 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
         //위치권한 받기 build.gradle => location implement추가 후
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         naverMap.locationSource = locationSource
+
+        //마커찍기(위치표시)
+        val marker = Marker()
+        marker.position = LatLng(37.498095, 127.027610) //마커를 찍을 위경도
+        marker.map = naverMap //마커의 맵을 네이버맵으로
+        marker.icon = MarkerIcons.LIGHTBLUE
     }
 
     //위치 권한 요청결과
@@ -51,12 +59,12 @@ class MainActivity : AppCompatActivity(),OnMapReadyCallback {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE){
+        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return
         }
 
-        if (locationSource.onRequestPermissionsResult(requestCode,permissions,grantResults)){
-            if (!locationSource.isActivated){
+        if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+            if (!locationSource.isActivated) {
                 naverMap.locationTrackingMode = LocationTrackingMode.None
             }
             return
