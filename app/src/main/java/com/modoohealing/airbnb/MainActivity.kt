@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
+import com.naver.maps.map.OnMapReadyCallback
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),OnMapReadyCallback {
 
+    private lateinit var naverMap: NaverMap
     private val mapView: MapView by lazy {
         findViewById(R.id.mapView)
     }
@@ -14,8 +16,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mapView.onCreate(savedInstanceState)
+        mapView.onCreate(savedInstanceState) //mapView연결
 
+        mapView.getMapAsync(this)
+
+    }
+
+    override fun onMapReady(map: NaverMap) {
+
+        naverMap = map
     }
 
     override fun onStart() {
