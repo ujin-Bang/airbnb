@@ -3,6 +3,7 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        jcenter()
         maven {
             url 'https://naver.jfrog.io/artifactory/maven/'
         }
@@ -13,11 +14,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter()
         maven {
             url 'https://naver.jfrog.io/artifactory/maven/'
         }
     }
 }
+
 
 
 rootProject.name = "airbnb"
