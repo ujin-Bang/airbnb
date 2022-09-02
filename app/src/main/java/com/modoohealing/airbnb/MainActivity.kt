@@ -1,12 +1,19 @@
 package com.modoohealing.airbnb
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -44,11 +51,45 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         naverMap.locationSource = locationSource
 
-        //마커찍기(위치표시)
-        val marker = Marker()
-        marker.position = LatLng(37.498095, 127.027610) //마커를 찍을 위경도
-        marker.map = naverMap //마커의 맵을 네이버맵으로
-        marker.icon = MarkerIcons.LIGHTBLUE
+        getHouseListFromAPI()
+    }
+    private fun getHouseListFromAPI(){
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://run.mocky.io")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        retrofit.create(HouseService::class.java).also {
+            it.getHouseList()
+                .enqueue(object : Callback<HouseDto>{
+                    override fun onResponse(call: Call<HouseDto>, response: Response<HouseDto>) {
+                        if (!response.isSuccessful){
+                            //실패 처리에 대한 구현
+                            return
+                        }
+                        response.body()?.let { dto ->
+                            Log.d("Retrofit",dto.toString())
+
+                            dto.items.forEach { house ->
+                                    val marker = Marker()
+                                    marker.position = LatLng(house.lat, house.lng)
+                                    //todo 마커클릭 리스너
+                                    marker.map = naverMap
+                                    marker.tag = house.id
+                                    marker.icon = MarkerIcons.BLACK
+                                    marker.iconTintColor = Color.RED
+
+
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<HouseDto>, t: Throwable) {
+                        //실패 처리에 대한 구현 (토스트,얼럿등)
+                    }
+
+                })
+        }
     }
 
     //위치 권한 요청결과
