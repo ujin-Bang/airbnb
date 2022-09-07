@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.naver.maps.map.widget.LocationButtonView
@@ -19,7 +20,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickListener {
 
     private lateinit var naverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
@@ -113,6 +114,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                     val marker = Marker()
                                     marker.position = LatLng(house.lat, house.lng)
                                     //todo 마커클릭 리스너
+                                    marker.onClickListener = this@MainActivity
                                     marker.map = naverMap
                                     marker.tag = house.id
                                     marker.icon = MarkerIcons.BLACK
@@ -191,5 +193,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+    }
+
+    //마커 온클릭리스너 함수 (MainActivity: Overlay.OnclickListener) 인터페이스 필수구현 함수
+    override fun onClick(overlay: Overlay): Boolean {
+        overlay.tag
+
+        val selectedModel = viewPagerAdapter.currentList.firstOrNull {
+            it.id == overlay.tag
+        }
+        selectedModel?.let {
+            val position = viewPagerAdapter.currentList.indexOf(it)
+            viewPager.currentItem = position
+        }
+        return true
     }
 }
