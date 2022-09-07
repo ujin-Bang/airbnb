@@ -54,6 +54,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         recyclerView.adapter = recyclerViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        //viewPager페이지 바뀌면 실행하는 이벤트 처리 함수.
+        viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) { //선택된 뷰페이저의 페이지
+                super.onPageSelected(position)
+
+                val selectedHouseModel = viewPagerAdapter.currentList[position]
+                val cameraUpdate = CameraUpdate.scrollTo(LatLng(selectedHouseModel.lat,selectedHouseModel.lng))
+                    .animate(CameraAnimation.Easing)
+
+                naverMap.moveCamera(cameraUpdate)
+            }
+        })
+
     }
 
     override fun onMapReady(map: NaverMap) {
