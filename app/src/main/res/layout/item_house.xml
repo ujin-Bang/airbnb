@@ -13,7 +13,6 @@
         android:layout_width="0dp"
         android:layout_margin="24dp"
         tools:src="@mipmap/ic_launcher"
-        android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="3:2"
         android:layout_height="0dp"/>
 
