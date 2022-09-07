@@ -12,6 +12,7 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
+import com.naver.maps.map.widget.LocationButtonView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +33,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val recyclerView: RecyclerView by lazy {
         findViewById(R.id.recyclerView)
+    }
+
+    private val currentLocationButton: LocationButtonView by lazy {
+        findViewById(R.id.currentLocationButton)
     }
 
     private val viewPagerAdapter = HouseViewPagerAdapter()
@@ -64,7 +69,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //현재위치 확인버튼 => 위치를 확인해야 하므로 권한필요
         val uiSetting = naverMap.uiSettings
-        uiSetting.isLocationButtonEnabled = true
+        uiSetting.isLocationButtonEnabled = false //로케이션버튼 비활성화(나오지 않게)
+
+        currentLocationButton.map = naverMap //xml에서 만든 locationButton띄우기
 
         //위치권한 받기 build.gradle => location implement추가 후
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
