@@ -11,6 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/houseViewPager"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:layout_marginBottom="120dp"
+        android:layout_height="100dp"/>
+
     <include layout="@layout/bottom_sheet" />
 
 
