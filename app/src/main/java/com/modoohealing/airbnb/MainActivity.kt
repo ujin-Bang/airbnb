@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         naverMap = map
 
         naverMap.maxZoom = 19.0 //naverMap 확대크기
-        naverMap.minZoom = 10.0 //naverMap 최소크기
+        naverMap.minZoom = 7.0 //naverMap 최소크기
 
         //시작 위치는 시청으로 되어있음 => 강남역으로 시작위치 변경하기
         val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.498095, 127.027610))
