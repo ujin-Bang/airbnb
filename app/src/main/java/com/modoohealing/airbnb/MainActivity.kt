@@ -1,5 +1,6 @@
 package com.modoohealing.airbnb
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -40,7 +41,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
         findViewById(R.id.currentLocationButton)
     }
 
-    private val viewPagerAdapter = HouseViewPagerAdapter()
+    //viewPagerItem클릭이벤트
+    private val viewPagerAdapter = HouseViewPagerAdapter(itemClicked = {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT,"[지금 이 가격에 예약하세요!!] ${it.title} ${it.price} 사진보기 : ${it.imgUrl}")
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(intent,null))
+    })
     private val recyclerViewAdapter = HouseListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
